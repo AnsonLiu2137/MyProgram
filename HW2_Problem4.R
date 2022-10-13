@@ -1,0 +1,26 @@
+library(ISLR)
+attach(Weekly)
+?Weekly
+glm.fit<-glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,family=binomial,data=Weekly)
+summary(glm.fit)
+glm.probs = predict(glm.fit, type = "response")
+glm.pred = rep("Down", length(glm.probs))
+glm.pred[glm.probs > 0.5] = "Up"
+table(glm.pred, Weekly$Direction)
+train=Year<=2007
+glm.fit.train=glm(Direction~Lag1+Lag2+Lag3,data=Weekly,family=binomial,subset=train)
+glm.probs=predict(glm.fit.train,newdata=Weekly[!train,],type="response")
+glm.pred = rep("Down", length(glm.probs))
+glm.pred[glm.probs > 0.5] = "Up"
+table(glm.pred, Weekly$Direction[!train])
+library(MASS)
+lda.fit=lda(Direction~Lag1+Lag2+Lag3,data=Weekly,subset=train)
+lda.pred=predict(lda.fit,newdata=Weekly[!train,],tyep="response")
+class(lda.pred)
+table(lda.pred$class,Weekly$Direction[!train])
+library(class)
+set.seed(2019)
+attach(Weekly)
+Xlag=cbind(Lag1,Lag2,Lag3)
+knn.pred=knn(Xlag[train,],Xlag[!train,],Direction[train],k=1)
+table(knn.pred,Direction[!train])

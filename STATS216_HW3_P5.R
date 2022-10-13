@@ -1,0 +1,42 @@
+
+library(tree)
+load("/Users/ansonliu/Downloads/als.RData")
+require(tree)
+full.tree.model<-tree(train.y~.,data=train.X)
+summary(full.tree.model)
+plot(full.tree.model)
+text(full.tree.model,pretty=0)
+set.seed(2019)
+tree.cv<-cv.tree(full.tree.model,FUN=prune.tree)
+summary(tree.cv)
+plot(tree.cv$size, tree.cv$dev, type="b")
+plot(tree.cv)
+prune.best.tree=prune.tree(full.tree.model,best=8)
+plot(prune.best.tree);text(prune.best.tree,pretty=0)
+prune.best.tree.pred<-predict(prune.best.tree,test.X)
+test.rmse=mean((test.y-prune.best.tree.pred)^2)
+test.rmse
+set.seed(2019)
+#install.packages("gbm")
+require(gbm)
+gbm.model<-gbm(train.y~.,data=train.X,distribution="gaussian", n.trees=1700
+, shrinkage=0.01, cv.folds=5)
+gbm.model
+summary(gbm.model)
+plot(1:1700,gbm.model$cv.error);points(1540,0.2457416,col="Red")
+which.min(gbm.model$cv.error)
+min(gbm.model$cv.error)
+gbm.model.pred<-predict(gbm.model,newdata=test.X)
+test.rmse.gbm=mean((test.y-gbm.model.pred)^2)
+test.rmse.gbm
+set.seed(2019)
+install.packages("randomForest")
+require(randomForest)
+?randomForest
+randomforest.model<-randomForest(train.y~.,data=train.X,mtry=80,importance=TRUE)
+plot(1:500,randomforest.model$mse,xlab="# of trees")
+randomforest.model.pred<-predict(randomforest.model,newdata=test.X)
+test.rmse.randomforest<-mean((randomforest.model.pred-test.y)^2)^(1/2)
+test.rmse.randomforest
+test.rmse.gbm^(1/2)
+test.rmse^(1/2)
