@@ -1,0 +1,80 @@
+
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.77 (7985) x86_64-apple-darwin17.0]
+
+[Workspace restored from /Users/ansonliu/.RData]
+[History restored from /Users/ansonliu/.Rapp.history]
+
+> library(car); library(alr4); S<-salary$sex; R<-factor(salary$rank); X<-salary$year; Y<-salary$salary
+Loading required package: carData
+Warning message:
+package ‘carData’ was built under R version 4.1.2 
+Loading required package: effects
+lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+Warning message:
+package ‘effects’ was built under R version 4.1.2 
+> fit0<-lm(Y~X+S+R+S:R); summary(fit0)
+
+Call:
+lm(formula = Y ~ X + S + R + S:R)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3335.4 -1552.4  -147.1   866.3  8010.3 
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)    15952.10     855.91  18.638  < 2e-16 ***
+X                409.90      78.21   5.241 4.10e-06 ***
+SFemale          244.50    1159.16   0.211 0.833894    
+RAssoc          4383.11    1063.99   4.119 0.000161 ***
+RProf           8975.97    1133.16   7.921 4.49e-10 ***
+SFemale:RAssoc -1059.19    2188.78  -0.484 0.630791    
+SFemale:RProf   1582.95    1836.99   0.862 0.393417    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2432 on 45 degrees of freedom
+Multiple R-squared:  0.8509,	Adjusted R-squared:  0.831 
+F-statistic:  42.8 on 6 and 45 DF,  p-value: < 2.2e-16
+
+> rss<-sum(fit0$residuals^2);rss
+[1] 266244659
+> fit1<-lm(Y~X+S+R)
+> anova(fit1,fit0)
+Analysis of Variance Table
+
+Model 1: Y ~ X + S + R
+Model 2: Y ~ X + S + R + S:R
+  Res.Df       RSS Df Sum of Sq      F Pr(>F)
+1     47 274688086                           
+2     45 266244659  2   8443427 0.7135 0.4954
+> fit1<-lm(Y~X+R)
+> anova(fit1,fit0)
+Analysis of Variance Table
+
+Model 1: Y ~ X + R
+Model 2: Y ~ X + S + R + S:R
+  Res.Df       RSS Df Sum of Sq      F Pr(>F)
+1     48 276992734                           
+2     45 266244659  3  10748075 0.6055 0.6148
+> #please igonore the first ANOVA table, as i include the extra S term
+> 

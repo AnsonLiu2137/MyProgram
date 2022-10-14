@@ -1,0 +1,73 @@
+
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.77 (7985) x86_64-apple-darwin17.0]
+
+[Workspace restored from /Users/ansonliu/.RData]
+[History restored from /Users/ansonliu/.Rapp.history]
+
+> library(car); library(alr4); x<-turk0$A; y<-turk0$Gain
+Loading required package: carData
+Warning message:
+package ‘carData’ was built under R version 4.1.2 
+Loading required package: effects
+lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+Warning message:
+package ‘effects’ was built under R version 4.1.2 
+> x2<-x^2
+> fit0<-lm(y~x+x2)
+> summary(fit0)
+
+Call:
+lm(formula = y ~ x + x2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-32.988 -16.542   2.193  12.788  36.059 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   625.542      5.227 119.665  < 2e-16 ***
+x             964.471     72.651  13.275 1.46e-14 ***
+x2          -1362.069    166.077  -8.201 2.28e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 18.82 on 32 degrees of freedom
+Multiple R-squared:  0.9291,	Adjusted R-squared:  0.9246 
+F-statistic: 209.6 on 2 and 32 DF,  p-value: < 2.2e-16
+
+> n<-length(x); n
+[1] 35
+> rss<-sum(fit0$residuals^2);rss
+[1] 11339.85
+> fit1<-lm(y~x);annova(fit1,fit0)
+Error in annova(fit1, fit0) : could not find function "annova"
+> fit1<-lm(y~x);anova(fit1,fit0)
+Analysis of Variance Table
+
+Model 1: y ~ x
+Model 2: y ~ x + x2
+  Res.Df   RSS Df Sum of Sq      F    Pr(>F)    
+1     33 35176                                  
+2     32 11340  1     23836 67.264 2.282e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> 

@@ -1,0 +1,142 @@
+
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.77 (7985) x86_64-apple-darwin17.0]
+
+[Workspace restored from /Users/ansonliu/.RData]
+[History restored from /Users/ansonliu/.Rapp.history]
+
+> library(car);library(alr4)
+Loading required package: carData
+Warning message:
+package ‘carData’ was built under R version 4.1.2 
+Loading required package: effects
+lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+Warning message:
+package ‘effects’ was built under R version 4.1.2 
+> y<-BSGgirls$Soma
+Error: object 'BSGgirls' not found
+> y<-BGSgirls$Soma
+> x1<-BGSgirls$WT18
+> x2<-BGSgirls$HT18
+> x3<-BGSgirls$WT2
+> fit1<-lm(y~x1+x2+x3)
+> library(mass)
+Error in library(mass) : there is no package called ‘mass’
+> library(MASS)
+Warning message:
+package ‘MASS’ was built under R version 4.1.2 
+> dim(BGSgirls)
+[1] 70 12
+> n<-dim(BGSgirls)[[1]]
+> fit0<-lm(y~1)
+> BIC.F<-stepAIC(fit0,scope=list(lower=fit0, upper=fit1),direction="forward", trace=1,k=log(n))
+Start:  AIC=-26.96
+y ~ 1
+
+       Df Sum of Sq    RSS     AIC
++ x1    1   23.0487 21.769 -73.263
++ x3    1    3.3041 41.514 -28.076
+<none>              44.818 -26.964
++ x2    1    0.0081 44.810 -22.728
+
+Step:  AIC=-73.26
+y ~ x1
+
+       Df Sum of Sq    RSS     AIC
++ x2    1    7.0379 14.731 -96.351
+<none>              21.769 -73.263
++ x3    1    0.0050 21.764 -69.031
+
+Step:  AIC=-96.35
+y ~ x1 + x2
+
+       Df Sum of Sq    RSS     AIC
+<none>              14.731 -96.351
++ x3    1   0.64072 14.091 -95.216
+2022-04-14 13:29:20.448 R[82742:18948712] +[NSSavePanel _warmUp] attempted warmup
+> fit2<-lm(y~x1+x2)
+> summary(fit1)
+
+Call:
+lm(formula = y ~ x1 + x2 + x3)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.28642 -0.27451 -0.05017  0.28123  1.46626 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  9.849527   1.591662   6.188 4.37e-08 ***
+x1           0.084989   0.007589  11.200  < 2e-16 ***
+x2          -0.066654   0.011118  -5.995 9.44e-08 ***
+x3           0.074041   0.042740   1.732   0.0879 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4621 on 66 degrees of freedom
+Multiple R-squared:  0.6856,	Adjusted R-squared:  0.6713 
+F-statistic: 47.98 on 3 and 66 DF,  p-value: < 2.2e-16
+
+> summary(fit2)
+
+Call:
+lm(formula = y ~ x1 + x2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.33743 -0.30762 -0.02511  0.31025  1.54334 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  9.621290   1.609713   5.977 9.73e-08 ***
+x1           0.087876   0.007513  11.696  < 2e-16 ***
+x2          -0.060622   0.010715  -5.658 3.46e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4689 on 67 degrees of freedom
+Multiple R-squared:  0.6713,	Adjusted R-squared:  0.6615 
+F-statistic: 68.42 on 2 and 67 DF,  p-value: < 2.2e-16
+
+> fit3<-lm(x3~x1+x2)
+> plot(fit3$residuals,fit2$residuals)
+> fit4<-lm(fit2$residuals~fit3$residuals)
+> summary(fit4)
+
+Call:
+lm(formula = fit2$residuals ~ fit3$residuals)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.28642 -0.27451 -0.05017  0.28123  1.46626 
+
+Coefficients:
+                Estimate Std. Error t value Pr(>|t|)  
+(Intercept)    1.785e-17  5.441e-02   0.000   1.0000  
+fit3$residuals 7.404e-02  4.211e-02   1.758   0.0832 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4552 on 68 degrees of freedom
+Multiple R-squared:  0.04349,	Adjusted R-squared:  0.02943 
+F-statistic: 3.092 on 1 and 68 DF,  p-value: 0.08317
+
+> 

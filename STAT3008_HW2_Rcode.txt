@@ -1,0 +1,140 @@
+
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.77 (7985) x86_64-apple-darwin17.0]
+
+[History restored from /Users/ansonliu/.Rapp.history]
+
+> EV1<-c(1,2,3,4,5,6,8,9)
+> EV2<-c(1,2,3,4,5,7,8,9)
+> y<-c(10,14,19,21,24,25,32,36)
+> Intercept=rep(1,length(EV1))
+> x<-cbind(Intercept,EV1,EV2)
+> n<-length(y);p<-dim(x)[[2]]-1
+> BetaHat=solve(t(x)%*%x)%*%t(x)%*%y;t(BetaHat)
+     Intercept      EV1       EV2
+[1,]  8.170213 4.784574 -1.696809
+> RSS=t(y)%*%y-t(y)%*%x%*%solve(t(x)%*%x)%*%t(x)%*%y; RSS
+         [,1]
+[1,] 5.300532
+> sigma2hat=RSS/(n-p-1);sigma2hat
+         [,1]
+[1,] 1.060106
+> fit1<-lm(y~x[,-1]);summary(fit1)
+
+Call:
+lm(formula = y ~ x[, -1])
+
+Residuals:
+         1          2          3          4          5          6          7 
+-1.258e+00 -3.457e-01  1.566e+00  4.787e-01  3.910e-01 -1.887e-15 -8.723e-01 
+         8 
+ 3.989e-02 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   8.1702     0.7509  10.880 0.000114 ***
+x[, -1]EV1    4.7846     1.1524   4.152 0.008893 ** 
+x[, -1]EV2   -1.6968     1.1189  -1.517 0.189821    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.03 on 5 degrees of freedom
+Multiple R-squared:  0.9899,	Adjusted R-squared:  0.9858 
+F-statistic: 244.6 on 2 and 5 DF,  p-value: 1.03e-05
+
+> ybar<-mean(y)
+> syy<-sum((y-ybar)^2)
+> syy
+[1] 523.875
+> varianceBeta=sigma2hat*solve((t(x)%*%x));varianceBeta
+Error in sigma2hat * solve((t(x) %*% x)) : non-conformable arrays
+> xxinverse=solve(t(x)%*%x)
+> varianceBeta=sigma2hat*xxinverse
+Error in sigma2hat * xxinverse : non-conformable arrays
+> varianceBeta<-sigma2hat*xxinverse
+Error in sigma2hat * xxinverse : non-conformable arrays
+> xxinverse
+            Intercept         EV1        EV2
+Intercept  0.53191489 -0.06382979 -0.0212766
+EV1       -0.06382979  1.25265957 -1.2074468
+EV2       -0.02127660 -1.20744681  1.1808511
+> varianceBeta<-sigma2hat%*%xxinverse
+Error in sigma2hat %*% xxinverse : non-conformable arguments
+> varianceBeta<-1.060106*xxinverse
+> varianceBeta
+            Intercept         EV1         EV2
+Intercept  0.56388617 -0.06766634 -0.02255545
+EV1       -0.06766634  1.32795193 -1.28002161
+EV2       -0.02255545 -1.28002161  1.25182730
+> newdata <- cbind(1,2)
+> ypredict<-newdata%*%BetaHat
+Error in newdata %*% BetaHat : non-conformable arguments
+> newdata<-cbind(1,1,2)
+> ypredict<-newdata%*%BetaHat
+> ypreditc
+Error: object 'ypreditc' not found
+> ypredict
+        [,1]
+[1,] 9.56117
+> sepredY=(1.060106*(1+newdata%*%(solve(t(x)%*%x)t(newdata)))
+Error: unexpected symbol in "sepredY=(1.060106*(1+newdata%*%(solve(t(x)%*%x)t"
+> sepredY=(1.060106*(1+newdata%*%solve(t(x)%*%x)%*%t(newdata))^(1/2)
++ spredY
+Error: unexpected symbol in:
+"sepredY=(1.060106*(1+newdata%*%solve(t(x)%*%x)%*%t(newdata))^(1/2)
+spredY"
+> sepredY=(1.060106*(1+newdata%*%solve(t(x)%*%x)%*%t(newdata))^(1/2)
++ 
++ sepredY <- (1.060106*(1+newdata%*%solve(t(x)%*%x)%*%t(newdata))^(1/2)
+Error: unexpected symbol in:
+"
+sepredY"
+> sepredY <- (1.060106*(1+newdata%*%solve(t(x)%*%x)%*%t(newdata))^(1/2)
++ 
++ ;sepredY
+Error: unexpected ';' in:
+"
+;"
+> sepredY <- (1.060106*(1+newdata%*%solve(t(x)%*%x)%*%t(newdata))^(1/2);sepredY
+Error: unexpected ';' in "sepredY <- (1.060106*(1+newdata%*%solve(t(x)%*%x)%*%t(newdata))^(1/2);"
+> newdata
+     [,1] [,2] [,3]
+[1,]    1    1    2
+> sepredY <- (1.060106*(1+newdata%*%xxinverse%*%t(newdata))^(1/2)
++ sepredY
+Error: unexpected symbol in:
+"sepredY <- (1.060106*(1+newdata%*%xxinverse%*%t(newdata))^(1/2)
+sepredY"
+> sepredY <- (1.060106*(1+newdata%*%xxinverse%*%t(newdata)))^(1/2);sepredY
+         [,1]
+[1,] 1.616667
+> tvalue <- qt(0.975,5); tvalue
+[1] 2.570582
+> ypredict+tvalue*sepredY
+         [,1]
+[1,] 13.71695
+> ypredict-tvalue*sepredY
+         [,1]
+[1,] 5.405395
+> 1-pf(127.3297,1,6)
+[1] 2.897288e-05
+> 1-pf(17.238,1,5)
+[1] 0.008893947
+> 

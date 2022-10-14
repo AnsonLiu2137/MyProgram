@@ -1,0 +1,76 @@
+
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.77 (7985) x86_64-apple-darwin17.0]
+
+[History restored from /Users/ansonliu/.Rapp.history]
+
+> library(alr4)
+Loading required package: car
+Loading required package: carData
+Loading required package: effects
+lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+Warning messages:
+1: package ‘carData’ was built under R version 4.1.2 
+2: package ‘effects’ was built under R version 4.1.2 
+> names(UBSprices)
+[1] "bigmac2009" "bread2009"  "rice2009"   "bigmac2003" "bread2003" 
+[6] "rice2003"  
+> y<-UBSprices$bigmac2009; x<-UBSprices$bread2009
+> n<-length(x);n
+[1] 54
+> fit0<-lm(y~x)
+> summary(fit0)
+
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-34.326 -11.764  -2.776   4.195  99.855 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   2.5221     5.0212   0.502    0.618    
+x             1.4262     0.1802   7.917 1.72e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 20.81 on 52 degrees of freedom
+Multiple R-squared:  0.5465,	Adjusted R-squared:  0.5378 
+F-statistic: 62.67 on 1 and 52 DF,  p-value: 1.724e-10
+
+> anova(fit0)
+Analysis of Variance Table
+
+Response: y
+          Df Sum Sq Mean Sq F value    Pr(>F)    
+x          1  27129 27129.3  62.674 1.724e-10 ***
+Residuals 52  22509   432.9                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> xbar<-mean(x);ybar<-mean(y)
+> sxx<-sum((x-xbar)^2); syy<-sum((y-ybar)^2);sxy<-sum((x-xbar)*(y-ybar))
+> rss<-syy-sxy^2/sxx
+> sigma.hat2<-rss/(n-2)
+> sigma.hat2
+[1] 432.8655
+2022-02-18 20:35:01.775 R[81452:6918886] +[NSSavePanel _warmUp] obviated
+> 

@@ -1,0 +1,56 @@
+
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.77 (7985) x86_64-apple-darwin17.0]
+
+[Workspace restored from /Users/ansonliu/.RData]
+[History restored from /Users/ansonliu/.Rapp.history]
+
+> library(car); library(alr4); x<-salarygov$Score; y<-salarygov$MaxSalary;x2<-x^2
+Loading required package: carData
+Warning message:
+package ‘carData’ was built under R version 4.1.2 
+Loading required package: effects
+lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+Warning message:
+package ‘effects’ was built under R version 4.1.2 
+> n <- length(y)
+> gm <- prod(y^{1/n})
+> lambda<-seq(-0.05,0.25,0.05)
+> RSS<-lambda*0
+> for (i in 1:7) {
++ Transform<-0
++ if (lambda[i]==0) Transform<-log(y)*gm
++ if (lambda[i]!=0) Transform<-(y^lambda[i]-1)/lambda[i]*gm^(1-lambda[i])
++ fit<-lm(Transform~x+x^2)
++ RSS[i]<-sum(fit$residuals^2)
++ }
+> plot(lambda,RSS); lines(lambda,RSS)
+> rbind(lambda,RSS)
+              [,1]     [,2]        [,3]       [,4]        [,5]       [,6]        [,7]
+lambda       -0.05        0        0.05        0.1        0.15        0.2        0.25
+RSS    89514044.98 88870593 88433411.49 88204512.0 88186601.56 88383105.0 88798189.19
+> Y<-((y^0.1-1)/0.1)*gm^(1-0.1)
+> fit3<-lm(Y~x+x2)
+> plot(fit3$fitted,rstudent(fit3),xlab="Fitted Value", ylab="Studentized Residuals",cex=1.5)
+2022-04-26 22:50:59.576 R[37147:24848893] +[NSSavePanel _warmUp] attempted warmup
+> plot(lambda,RSS)
+> plot(lambda,RSS); lines(lambda,RSS)
+> 
